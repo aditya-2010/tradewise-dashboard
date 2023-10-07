@@ -1,0 +1,113 @@
+{
+  "customers": [
+    {
+      "_id": 88723956932,
+      "name": "Aditya",
+      "phone": "9876543211",
+      "email": "aditya@email.com",
+      "address": "Plot no 349, Belgaum, Karnataka"
+    },
+    {
+      "_id": 887239565325,
+      "name": "Elon Musk",
+      "phone": "9876543212",
+      "email": "elon@email.com",
+      "address": "Plot no 350, Belgaum, Karnataka"
+    },
+    {
+      "_id": 88723956917,
+      "name": "Bill Gates",
+      "phone": "9876543213",
+      "email": "bill@email.com",
+      "address": "Plot no 351, Belgaum, Karnataka"
+    },
+    {
+      "_id": 88723956197,
+      "name": "Mark Zuckerburg",
+      "phone": "9876543214",
+      "email": "mark@email.com",
+      "address": "Plot no 352, Belgaum, Karnataka"
+    }
+  ],
+  "orders": [
+    {
+      "_id": 63151,
+      "customer_id": 88723956197,
+      "orderDate": "",
+      "items": [],
+      "totalAmount": 2500,
+      "status": "processing",
+      "paymentStatus": "pending",
+      "paymentDueDate": ""
+    },
+    {
+      "_id": 63152,
+      "customer_id": 88723956197,
+      "orderDate": "",
+      "items": [],
+      "totalAmount": 2000,
+      "status": "shipped",
+      "paymentStatus": "pending",
+      "paymentDueDate": ""
+    },
+    {
+      "_id": 63153,
+      "customer_id": 88723956197,
+      "orderDate": "",
+      "items": [],
+      "totalAmount": 2000,
+      "status": "delivered",
+      "paymentStatus": "paid",
+      "paymentDueDate": ""
+    },
+    {
+      "_id": 63154,
+      "customer_id": 88723956197,
+      "orderDate": "",
+      "items": [],
+      "totalAmount": 2000,
+      "status": "cancelled",
+      "paymentStatus": "n/a",
+      "paymentDueDate": ""
+    }
+  ],
+  "products": [
+    {
+      "_id": 78987,
+      "cover": "/assets/images/products/product_1.jpg",
+      "productName": "Nike Air Force 1 NDESTRUKT",
+      "category": "XYZ",
+      "price": 499,
+      "stockQuantity": 20,
+      "archiveStatus": false
+    },
+    {
+      "_id": 78990,
+      "cover": "/assets/images/products/product_2.jpg",
+      "productName": "Nike Space Hippie 04",
+      "category": "XYC",
+      "price": 599,
+      "stockQuantity": 30,
+      "archiveStatus": false
+    },
+    {
+      "_id": 78991,
+      "cover": "/assets/images/products/product_3.jpg",
+      "productName": "Nike Air Zoom Pegasus 37 A.I.R. Chaz Bear",
+      "category": "NDDL",
+      "price": 999,
+      "stockQuantity": 35,
+      "archiveStatus": true
+    },
+    {
+      "_id": 78995,
+      "cover": "/assets/images/products/product_4.jpg",
+      "productName": "Nike Blazer Low 77 Vintage",
+      "category": "NDDL",
+      "price": 1999,
+      "stockQuantity": 65,
+      "archiveStatus": false
+    }
+  ],
+  "actions": [{}]
+}
