@@ -1,3 +1,4 @@
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 // @mui
@@ -6,13 +7,15 @@ import { Button, Container, Stack, Typography } from '@mui/material';
 import FormModal from '../components/form-modal/FormModal';
 import { ProductSort, ProductList, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
-import PRODUCTS from '../_mock/products';
+// import PRODUCTS from '../_mock/products';
 
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
   const [openFilter, setOpenFilter] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+  // const [modalOpen, setModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleOpenFilter = () => {
     setOpenFilter(true);
@@ -23,11 +26,8 @@ export default function ProductsPage() {
   };
 
   const handleOpenModal = () => {
-    setModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalOpen(false);
+    // setModalOpen(true);
+    navigate('form/new');
   };
 
   return (
@@ -36,7 +36,9 @@ export default function ProductsPage() {
         <title> TradeWise Dashboard </title>
       </Helmet>
 
-      <FormModal modalOpen={modalOpen} handleCloseModal={handleCloseModal} />
+      <Outlet />
+
+      <FormModal modalOpen={false} />
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
@@ -65,7 +67,7 @@ export default function ProductsPage() {
           </Stack>
         </Stack>
 
-        <ProductList products={PRODUCTS} />
+        <ProductList />
         {/* <ProductCartWidget /> */}
       </Container>
     </>

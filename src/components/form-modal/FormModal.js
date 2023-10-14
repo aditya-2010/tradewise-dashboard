@@ -1,9 +1,12 @@
-import { Box, FormControlLabel, FormGroup, Modal, TextField, Button, Typography, Checkbox } from '@mui/material';
+import { useState } from 'react';
+import styled from '@emotion/styled';
+import { Box, FormControlLabel, Modal, TextField, Button, Typography, Checkbox, FormControl } from '@mui/material';
 import { PropTypes } from 'prop-types';
+import { useNavigate } from 'react-router-dom';
+import { useProducts } from '../../context/ProductsContext';
 
 FormModal.propTypes = {
   modalOpen: PropTypes.bool,
-  handleCloseModal: PropTypes.func,
 };
 
 const style = {
@@ -17,30 +20,44 @@ const style = {
   p: 4,
 };
 
-const currencies = [
-  {
-    value: 'CAT1',
-    label: 'Category 1',
-  },
-  {
-    value: 'CAT2',
-    label: 'Category 2',
-  },
-  {
-    value: 'CAT3',
-    label: 'Category 3',
-  },
-  {
-    value: 'CAT4',
-    label: 'Category 4',
-  },
-];
+const CloseButton = styled(Button)({
+  color: 'red',
+  fontSize: '24px',
+  position: 'absolute',
+  top: '0',
+  right: '0',
+});
 
-export default function FormModal({ modalOpen, handleCloseModal }) {
+export default function FormModal({ modalOpen }) {
+  const [productName, setProductName] = useState('');
+  const [price, setPrice] = useState('');
+  const [stockQuantity, setStockQuantity] = useState('');
+  const [archiveStatus, setArchiveStatus] = useState(false);
+
+  const navigate = useNavigate();
+  const { createProduct, isLoading } = useProducts();
+
+  function handleClose() {
+    navigate(-1);
+  }
+
+  function handleSubmit() {
+    const product = {
+      productName,
+      price,
+      stockQuantity,
+      archiveStatus,
+    };
+
+    createProduct(product);
+    // console.log(product);
+    if (!isLoading) navigate(-1);
+  }
+
   return (
     <Modal
       open={modalOpen}
-      onClose={handleCloseModal}
+      onClose={() => handleClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -48,32 +65,34 @@ export default function FormModal({ modalOpen, handleCloseModal }) {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Add New Product
         </Typography>
+        <CloseButton onClick={() => handleClose()}>&#10006;</CloseButton>
         {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
     </Typography> */}
-        <FormGroup>
+        <FormControl>
           <Button sx={{ mt: '20px' }} variant="outlined" component="label">
             Upload Product Image*
             <input required type="file" hidden />
           </Button>
           <TextField
             required
+            value={productName}
+            onChange={(e) => setProductName(e.target.value)}
             id="standard-required"
             label="Product Name"
             variant="standard"
             margin="dense"
             // fullWidth
           />
-          <TextField
+          {/* <TextField
             id="standard-multiline-flexible"
             label="Description"
             variant="standard"
             margin="dense"
-            // fullWidth
             multiline
             maxRows={4}
-          />
-          <TextField
+          /> */}
+          {/* <TextField
             required
             fullWidth
             id="standard-select-currency-native"
@@ -92,10 +111,11 @@ export default function FormModal({ modalOpen, handleCloseModal }) {
                 {option.label}
               </option>
             ))}
-          </TextField>
+          </TextField> */}
           <TextField
             required
-            // fullWidth
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
             type="number"
             id="standard-required"
             label="Product Price"
@@ -104,19 +124,27 @@ export default function FormModal({ modalOpen, handleCloseModal }) {
           />
           <TextField
             required
-            // fullWidth
+            value={stockQuantity}
+            onChange={(e) => setStockQuantity(e.target.value)}
             type="number"
             id="standard-required"
             label="Stock Quantity"
             variant="standard"
             margin="dense"
           />
-          <FormControlLabel control={<Checkbox />} label="Mark this as Archived" />
+          <FormControlLabel
+            value={archiveStatus}
+            onChange={() => setArchiveStatus((archiveStatus) => !archiveStatus)}
+            control={<Checkbox />}
+            label="Mark this as Archived"
+          />
           <div style={{ marginTop: '20px ', textAlign: 'right' }}>
-            <Button onClick={handleCloseModal}>cancel</Button>
-            <Button variant="contained">submit</Button>
+            <Button onClick={() => handleClose()}>cancel</Button>
+            <Button disabled={isLoading} variant="contained" onClick={() => handleSubmit()}>
+              submit
+            </Button>
           </div>
-        </FormGroup>
+        </FormControl>
       </Box>
     </Modal>
   );

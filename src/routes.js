@@ -9,6 +9,8 @@ import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
+import { ProductsProvider } from './context/ProductsContext';
+import FormModal from './components/form-modal/FormModal';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +23,15 @@ export default function Router() {
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
+        {
+          path: 'products',
+          element: (
+            <ProductsProvider>
+              <ProductsPage />
+            </ProductsProvider>
+          ),
+          children: [{ path: 'form/new', element: <FormModal modalOpen /> }],
+        },
         { path: 'blog', element: <BlogPage /> },
       ],
     },

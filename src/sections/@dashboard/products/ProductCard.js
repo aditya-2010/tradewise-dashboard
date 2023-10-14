@@ -25,7 +25,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, archiveStatus, stockQuantity } = product;
+  const { productName, cover, price, archiveStatus, stockQuantity } = product;
 
   return (
     <Card>
@@ -42,32 +42,24 @@ export default function ShopProductCard({ product }) {
               textTransform: 'uppercase',
             }}
           >
-            {archiveStatus}
+            {archiveStatus ? 'Archived' : ''}
           </Label>
         )}
-        <StyledProductImg alt={name} src={cover} />
+        <StyledProductImg alt={productName} src={cover} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link color="inherit" underline="hover">
           <Typography variant="subtitle2" noWrap>
-            {name}
+            {productName}
           </Typography>
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          {/* <ColorPreview colors={colors} /> */}
+          <Typography component="span" variant="body1">
+            {stockQuantity}
+          </Typography>
           <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
-              }}
-            >
-              {stockQuantity && fCurrency(stockQuantity)}
-            </Typography>
             &nbsp;
             {fCurrency(price)}
           </Typography>
