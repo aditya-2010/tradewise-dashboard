@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Box, Card, Link, Typography, Stack, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useProducts } from '../../../context/ProductsContext';
+import Iconify from '../../../components/iconify/Iconify';
 // utils
 import { fCurrency } from '../../../utils/formatNumber';
 // components
@@ -22,13 +24,21 @@ const StyledProductImg = styled('img')({
 
 ShopProductCard.propTypes = {
   product: PropTypes.object,
+  userId: PropTypes.string,
 };
 
-export default function ShopProductCard({ product }) {
+export default function ShopProductCard({ product, userId }) {
   const { productName, cover, price, archiveStatus, stockQuantity } = product;
+  const { deleteProduct } = useProducts();
 
   return (
     <Card>
+      <IconButton
+        sx={{ position: 'absolute', right: 4, top: 4, zIndex: '100', background: 'white' }}
+        onClick={() => deleteProduct(product)}
+      >
+        <Iconify icon="eva:trash-2-fill" />
+      </IconButton>
       <Box sx={{ pt: '100%', position: 'relative' }}>
         {archiveStatus && (
           <Label
@@ -37,7 +47,7 @@ export default function ShopProductCard({ product }) {
             sx={{
               zIndex: 9,
               top: 16,
-              right: 16,
+              left: 16,
               position: 'absolute',
               textTransform: 'uppercase',
             }}
@@ -45,9 +55,11 @@ export default function ShopProductCard({ product }) {
             {archiveStatus ? 'Archived' : ''}
           </Label>
         )}
-        <StyledProductImg alt={productName} src={cover} />
+        <StyledProductImg
+          src={`https://zgemwnjlvtzarvnyerlv.supabase.co/storage/v1/object/public/tradewise-storage/${userId}/${cover}`}
+          alt={productName}
+        />
       </Box>
-
       <Stack spacing={2} sx={{ p: 3 }}>
         <Link color="inherit" underline="hover">
           <Typography variant="subtitle2" noWrap>

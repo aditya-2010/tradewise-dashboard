@@ -1,37 +1,16 @@
 import styled from '@emotion/styled';
 
 const Spinner = styled.div`
-  width: 56px;
-  height: 56px;
-  display: grid;
-  border: 4.5px solid #0000;
-  border-radius: 50%;
-  border-color: #dbdcef #0000;
-  animation: spinner-e04l1k 1s infinite linear;
+  width: 60px;
+  height: 60px;
+  border: 10px solid #d0ebff;
+  border-top-color: #2e71d6;
+  animation: spin013151 1s linear infinite;
+  border-radius: 100%;
 
-  &::before,
-  &::after {
-    content: '';
-    grid-area: 1/1;
-    margin: 2.2px;
-    border: inherit;
-    border-radius: 50%;
-  }
-
-  &::before {
-    border-color: #474bff #0000;
-    animation: inherit;
-    animation-duration: 0.5s;
-    animation-direction: reverse;
-  }
-
-  &::after {
-    margin: 8.9px;
-  }
-
-  @keyframes spinner-e04l1k {
-    100% {
-      transform: rotate(1turn);
+  @keyframes spin013151 {
+    to {
+      transform: rotate(360deg);
     }
   }
 `;

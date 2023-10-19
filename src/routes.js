@@ -1,28 +1,45 @@
 import { Navigate, useRoutes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
-//
+// pages
 import BlogPage from './pages/BlogPage';
-import UserPage from './pages/UserPage';
-import LoginPage from './pages/LoginPage';
+import CustomersPage from './pages/CustomersPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
+// components
 import { ProductsProvider } from './context/ProductsContext';
 import FormModal from './components/form-modal/FormModal';
+import Login from './pages/SupabaseLogin';
+import { supabase } from './supabase';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
   const routes = useRoutes([
     {
       path: '/dashboard',
-      element: <DashboardLayout />,
+      element: session ? <DashboardLayout /> : <Login />,
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
+        { path: 'customers', element: <CustomersPage /> },
         {
           path: 'products',
           element: (
@@ -37,7 +54,7 @@ export default function Router() {
     },
     {
       path: 'login',
-      element: <LoginPage />,
+      element: <Login />,
     },
     {
       element: <SimpleLayout />,

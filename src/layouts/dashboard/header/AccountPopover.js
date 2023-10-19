@@ -2,6 +2,8 @@ import { useState } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
+// supabase
+import { supabase } from '../../../supabase';
 // mocks_
 import account from '../../../_mock/account';
 
@@ -32,6 +34,11 @@ export default function AccountPopover() {
   };
 
   const handleClose = () => {
+    setOpen(null);
+  };
+
+  const handleLogout = () => {
+    supabase.auth.signOut();
     setOpen(null);
   };
 
@@ -97,7 +104,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </Popover>

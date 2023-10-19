@@ -45,6 +45,8 @@
     "@iconify/react": "^4.1.0",
     "@mui/lab": "^5.0.0-alpha.103",
     "@mui/material": "^5.11.10",
+    "@supabase/auth-ui-react": "^0.4.6",
+    "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.38.1",
     "apexcharts": "^3.37.0",
     "change-case": "^4.1.2",
@@ -61,6 +63,7 @@
     "react-router-dom": "^6.8.1",
     "react-scripts": "^5.0.1",
     "simplebar-react": "^3.2.1",
+    "uuid": "^9.0.1",
     "web-vitals": "^3.1.1"
   },
   "devDependencies": {
