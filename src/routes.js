@@ -14,6 +14,7 @@ import { ProductsProvider } from './context/ProductsContext';
 import FormModal from './components/form-modal/FormModal';
 import Login from './pages/SupabaseLogin';
 import { supabase } from './supabase';
+import { CustomerProvider } from './context/CustomerContext';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +40,15 @@ export default function Router() {
       children: [
         { element: <Navigate to="/dashboard/app" />, index: true },
         { path: 'app', element: <DashboardAppPage /> },
-        { path: 'customers', element: <CustomersPage /> },
+        {
+          path: 'customers',
+          element: (
+            <CustomerProvider>
+              {' '}
+              <CustomersPage />{' '}
+            </CustomerProvider>
+          ),
+        },
         {
           path: 'products',
           element: (

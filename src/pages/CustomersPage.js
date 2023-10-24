@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
+// import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 // @mui
 import {
@@ -23,23 +23,23 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
-import Label from '../components/label';
+// import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
-// mock
-import USERLIST from '../_mock/user';
+// context
+import { useCustomers } from '../context/CustomerContext';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
+  { id: 'phone', label: 'Phone No.', alignRight: false },
+  { id: 'email', label: 'E-Mail ID', alignRight: false },
+  { id: 'address', label: 'Address', alignRight: false },
+  // { id: 'status', label: 'Status', alignRight: false },
+  // { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -74,6 +74,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function CustomerPage() {
+  const { customers } = useCustomers();
+
   const [open, setOpen] = useState(null);
 
   const [page, setPage] = useState(0);
@@ -104,7 +106,7 @@ export default function CustomerPage() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = customers.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -140,9 +142,13 @@ export default function CustomerPage() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  // const handleDelete = (e) => {
+  //   console.log(e);
+  // };
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - customers.length) : 0;
+
+  const filteredUsers = applySortFilter(customers, getComparator(order, orderBy), filterName);
 
   const isNotFound = !filteredUsers.length && !!filterName;
 
@@ -163,7 +169,7 @@ export default function CustomerPage() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar selected={selected} filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -171,15 +177,15 @@ export default function CustomerPage() {
                 <UserListHead
                   order={order}
                   orderBy={orderBy}
+                  rowCount={customers.length}
                   headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
                   numSelected={selected.length}
                   onRequestSort={handleRequestSort}
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, phone, email, address } = row;
                     const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
@@ -190,28 +196,30 @@ export default function CustomerPage() {
 
                         <TableCell component="th" scope="row" padding="none">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar>{name.slice(0, 1)}</Avatar>
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
                           </Stack>
                         </TableCell>
 
-                        <TableCell align="left">{company}</TableCell>
+                        <TableCell align="left">{phone}</TableCell>
+                        <TableCell align="left">{email}</TableCell>
+                        <TableCell align="left">{address}</TableCell>
 
-                        <TableCell align="left">{role}</TableCell>
+                        {/* <TableCell align="left">{role}</TableCell> */}
 
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell> */}
 
-                        <TableCell align="left">
+                        {/* <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
-                        </TableCell>
+                        </TableCell> */}
 
-                        <TableCell align="right">
+                        {/* <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
                           </IconButton>
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     );
                   })}
@@ -252,7 +260,7 @@ export default function CustomerPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={customers.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
@@ -261,7 +269,7 @@ export default function CustomerPage() {
         </Card>
       </Container>
 
-      <Popover
+      {/* <Popover
         open={Boolean(open)}
         anchorEl={open}
         onClose={handleCloseMenu}
@@ -284,11 +292,11 @@ export default function CustomerPage() {
           Edit
         </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
+        <MenuItem sx={{ color: 'error.main' }} onClick={(e) => handleDelete(e)}>
           <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
           Delete
         </MenuItem>
-      </Popover>
+      </Popover> */}
     </>
   );
 }
