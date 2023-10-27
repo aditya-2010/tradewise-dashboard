@@ -2,12 +2,12 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { Box, FormControlLabel, Modal, TextField, Button, Typography, Checkbox, FormControl } from '@mui/material';
 import { PropTypes } from 'prop-types';
-import { useNavigate } from 'react-router-dom';
 import { v4 as uuid } from 'uuid';
 import { useProducts } from '../../context/ProductsContext';
 
 FormModal.propTypes = {
   modalOpen: PropTypes.bool,
+  setModalOpen: PropTypes.func,
 };
 
 const style = {
@@ -29,19 +29,14 @@ const CloseButton = styled(Button)({
   right: '0',
 });
 
-export default function FormModal({ modalOpen }) {
+export default function FormModal({ modalOpen, setModalOpen }) {
   const [coverImage, setCoverImage] = useState(null);
   const [productName, setProductName] = useState('');
   const [price, setPrice] = useState('');
   const [stockQuantity, setStockQuantity] = useState('');
   const [archiveStatus, setArchiveStatus] = useState(false);
 
-  const navigate = useNavigate();
   const { createProduct, uploadImage, isLoading } = useProducts();
-
-  function handleClose() {
-    navigate(-1);
-  }
 
   function handleSubmit() {
     if (!productName || !price || !stockQuantity || !coverImage || +price === 0 || +stockQuantity === 0) {
@@ -62,13 +57,13 @@ export default function FormModal({ modalOpen }) {
     createProduct(product);
     uploadImage(coverImage, filename);
     // console.log(product);
-    if (!isLoading) navigate(-1);
+    if (!isLoading) setModalOpen(false);
   }
 
   return (
     <Modal
       open={modalOpen}
-      onClose={() => handleClose}
+      onClose={() => setModalOpen(false)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -76,7 +71,7 @@ export default function FormModal({ modalOpen }) {
         <Typography id="modal-modal-title" variant="h6" component="h2">
           Add New Product
         </Typography>
-        <CloseButton onClick={() => handleClose()}>&#10006;</CloseButton>
+        <CloseButton onClick={() => setModalOpen(false)}>&#10006;</CloseButton>
         {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
       Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
     </Typography> */}
@@ -151,7 +146,7 @@ export default function FormModal({ modalOpen }) {
             label="Mark this as Archived"
           />
           <div style={{ marginTop: '20px ', textAlign: 'right' }}>
-            <Button onClick={() => handleClose()}>cancel</Button>
+            <Button onClick={() => setModalOpen(false)}>cancel</Button>
             <Button disabled={isLoading} variant="contained" onClick={() => handleSubmit()}>
               submit
             </Button>

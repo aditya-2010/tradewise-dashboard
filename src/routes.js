@@ -11,7 +11,6 @@ import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 // components
 import { ProductsProvider } from './context/ProductsContext';
-import FormModal from './components/form-modal/FormModal';
 import Login from './pages/SupabaseLogin';
 import { supabase } from './supabase';
 import { CustomerProvider } from './context/CustomerContext';
@@ -44,8 +43,7 @@ export default function Router() {
           path: 'customers',
           element: (
             <CustomerProvider>
-              {' '}
-              <CustomersPage />{' '}
+              <CustomersPage />
             </CustomerProvider>
           ),
         },
@@ -56,7 +54,6 @@ export default function Router() {
               <ProductsPage />
             </ProductsProvider>
           ),
-          children: [{ path: 'form/new', element: <FormModal modalOpen /> }],
         },
         { path: 'blog', element: <BlogPage /> },
       ],

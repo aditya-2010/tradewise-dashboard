@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { PropTypes, func } from 'prop-types';
+import { PropTypes } from 'prop-types';
 import { supabase } from '../supabase';
 
 const CustomerContext = createContext();
@@ -26,7 +26,17 @@ function CustomerProvider({ children }) {
     setIsLoading(false);
   }
 
-  // async function createCustomer() {}
+  async function createCustomer(customer) {
+    try {
+      setIsLoading(true);
+      const { data } = await supabase.from('customers').insert(customer).select();
+      if (data) setCustomers((customers) => [...customers, data[0]]);
+    } catch (err) {
+      throw new Error('Could not add new customer', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   async function deleteCustomer(name) {
     const { error } = await supabase.from('customers').delete().eq('name', name);
@@ -34,7 +44,9 @@ function CustomerProvider({ children }) {
   }
 
   return (
-    <CustomerContext.Provider value={{ customers, isLoading, deleteCustomer }}>{children}</CustomerContext.Provider>
+    <CustomerContext.Provider value={{ customers, isLoading, deleteCustomer, createCustomer }}>
+      {children}
+    </CustomerContext.Provider>
   );
 }
 

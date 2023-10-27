@@ -37,14 +37,16 @@ UserListToolbar.propTypes = {
   selected: PropTypes.array,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
+  setSelected: PropTypes.func,
 };
 
-export default function UserListToolbar({ selected, filterName, onFilterName }) {
+export default function UserListToolbar({ selected, setSelected, filterName, onFilterName }) {
   const numSelected = selected.length;
   const { deleteCustomer } = useCustomers();
 
   const handleDelete = () => {
     selected.forEach((item) => deleteCustomer(item));
+    setSelected([]);
   };
 
   return (
