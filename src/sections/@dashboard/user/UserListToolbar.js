@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment } from '@mui/material';
 // component
+import { Icon } from '@iconify/react';
 import Iconify from '../../../components/iconify';
 import { useCustomers } from '../../../context/CustomerContext';
+import FormModal from '../../../components/form-modal/AddCustomerForm';
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +44,8 @@ UserListToolbar.propTypes = {
 };
 
 export default function UserListToolbar({ selected, setSelected, filterName, onFilterName }) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const numSelected = selected.length;
   const { deleteCustomer } = useCustomers();
 
@@ -75,12 +80,23 @@ export default function UserListToolbar({ selected, setSelected, filterName, onF
         />
       )}
 
+      <FormModal modalOpen={modalOpen} setModalOpen={setModalOpen} selected={selected[0]} />
+
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton onClick={() => handleDelete()}>
-            <Iconify icon="eva:trash-2-fill" />
-          </IconButton>
-        </Tooltip>
+        <div>
+          {numSelected === 1 && (
+            <Tooltip title="Edit">
+              <IconButton onClick={() => setModalOpen(true)}>
+                <Icon icon="iconamoon:edit" />
+              </IconButton>
+            </Tooltip>
+          )}
+          <Tooltip title="Delete">
+            <IconButton onClick={() => handleDelete()}>
+              <Iconify icon="eva:trash-2-fill" />
+            </IconButton>
+          </Tooltip>
+        </div>
       ) : (
         <Tooltip title="Filter list">
           <IconButton>

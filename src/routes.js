@@ -14,6 +14,7 @@ import { ProductsProvider } from './context/ProductsContext';
 import Login from './pages/SupabaseLogin';
 import { supabase } from './supabase';
 import { CustomerProvider } from './context/CustomerContext';
+import OrdersPage from './pages/OrdersPage';
 
 // ----------------------------------------------------------------------
 
@@ -53,6 +54,14 @@ export default function Router() {
             <ProductsProvider>
               <ProductsPage />
             </ProductsProvider>
+          ),
+        },
+        {
+          path: 'orders',
+          element: (
+            // <ProductsProvider>
+            <OrdersPage />
+            // </ProductsProvider>
           ),
         },
         { path: 'blog', element: <BlogPage /> },

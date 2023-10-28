@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
-// import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 // @mui
 import {
@@ -10,21 +9,17 @@ import {
   Paper,
   Avatar,
   Button,
-  Popover,
   Checkbox,
   TableRow,
-  MenuItem,
   TableBody,
   TableCell,
   Container,
   Typography,
-  IconButton,
   TableContainer,
   TablePagination,
 } from '@mui/material';
 // components
 import FormModal from '../components/form-modal/AddCustomerForm';
-// import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
@@ -40,8 +35,6 @@ const TABLE_HEAD = [
   { id: 'phone', label: 'Phone No.', alignRight: false },
   { id: 'email', label: 'E-Mail ID', alignRight: false },
   { id: 'address', label: 'Address', alignRight: false },
-  // { id: 'status', label: 'Status', alignRight: false },
-  // { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -79,8 +72,6 @@ export default function CustomerPage() {
   const { customers, isLoading } = useCustomers();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');
@@ -92,14 +83,6 @@ export default function CustomerPage() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

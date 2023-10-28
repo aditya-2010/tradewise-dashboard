@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { Box, Modal, TextField, Button, Typography, FormControl } from '@mui/material';
 import { PropTypes } from 'prop-types';
+import { supabase } from '../../supabase';
 import { useCustomers } from '../../context/CustomerContext';
 
 FormModal.propTypes = {
   modalOpen: PropTypes.bool,
   setModalOpen: PropTypes.func,
+  selected: PropTypes.string,
 };
 
 const style = {
@@ -28,13 +30,26 @@ const CloseButton = styled(Button)({
   right: '0',
 });
 
-export default function FormModal({ modalOpen, setModalOpen }) {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [address, setAddress] = useState('');
+export default function FormModal({ selected = '', modalOpen, setModalOpen }) {
+  // const [name, setName] = useState('');
+  // const [phone, setPhone] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [address, setAddress] = useState('');
 
-  const { createCustomer, isLoading } = useCustomers();
+  const [currentCustomer, setCurrentCustomer] = useState({ name: '', phone: '', email: '', address: '' });
+  const { name, phone, email, address } = currentCustomer;
+  const { createCustomer, updateCustomer, isLoading } = useCustomers();
+
+  useEffect(() => {
+    if (selected) getCustomer(selected);
+  }, [selected]);
+
+  async function getCustomer(name) {
+    const { data: customer, error } = await supabase.from('customers').select('*').eq('name', name);
+
+    if (customer) setCurrentCustomer(customer[0]);
+    if (error) alert('Could not fetch customer details');
+  }
 
   function handleSubmit() {
     if (!name || !phone) {
@@ -51,12 +66,14 @@ export default function FormModal({ modalOpen, setModalOpen }) {
       address: address.trim(),
     };
 
-    createCustomer(customer);
+    if (selected === '') createCustomer(customer);
+    else updateCustomer(selected, customer);
+    // selected ? updateCustomer(selected, customer) : createCustomer(customer);
     if (!isLoading) setModalOpen(false);
-    setName('');
-    setPhone('');
-    setEmail('');
-    setAddress('');
+    // setName('');
+    // setPhone('');
+    // setEmail('');
+    // setAddress('');
   }
 
   return (
@@ -75,7 +92,7 @@ export default function FormModal({ modalOpen, setModalOpen }) {
           <TextField
             required
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => setCurrentCustomer((cc) => ({ ...cc, name: e.target.value }))}
             id="standard-required"
             label="Customer Name"
             variant="standard"
@@ -84,7 +101,7 @@ export default function FormModal({ modalOpen, setModalOpen }) {
           <TextField
             required
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => setCurrentCustomer((cc) => ({ ...cc, phone: e.target.value }))}
             type="number"
             id="standard-required"
             label="Phone No."
@@ -93,7 +110,7 @@ export default function FormModal({ modalOpen, setModalOpen }) {
           />
           <TextField
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setCurrentCustomer((cc) => ({ ...cc, email: e.target.value }))}
             type="email"
             id="standard"
             label="Email ID"
@@ -102,7 +119,7 @@ export default function FormModal({ modalOpen, setModalOpen }) {
           />
           <TextField
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={(e) => setCurrentCustomer((cc) => ({ ...cc, address: e.target.value }))}
             id="standard"
             label="Address"
             variant="standard"

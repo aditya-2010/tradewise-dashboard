@@ -27,15 +27,28 @@ function CustomerProvider({ children }) {
   }
 
   async function createCustomer(customer) {
-    try {
-      setIsLoading(true);
-      const { data } = await supabase.from('customers').insert(customer).select();
-      if (data) setCustomers((customers) => [...customers, data[0]]);
-    } catch (err) {
-      throw new Error('Could not add new customer', err);
-    } finally {
-      setIsLoading(false);
+    setIsLoading(true);
+    const { data, error } = await supabase.from('customers').insert(customer).select();
+    if (data) setCustomers((customers) => [...customers, data[0]]);
+    if (error) console.log(error);
+    setIsLoading(false);
+  }
+
+  async function updateCustomer(selected, customer) {
+    setIsLoading(true);
+    const { data, error } = await supabase.from('customers').update(customer).eq('name', selected).select();
+
+    // if (data) setCustomers((customers) => [...customers, data[0]]);
+    if (data) {
+      const updatedCustomers = customers.map((cust) => {
+        if (cust.id === customer.id) return { ...cust, customer };
+        return cust;
+      });
+      setCustomers(updatedCustomers);
     }
+
+    if (error) console.log(error);
+    setIsLoading(false);
   }
 
   async function deleteCustomer(name) {
@@ -44,7 +57,7 @@ function CustomerProvider({ children }) {
   }
 
   return (
-    <CustomerContext.Provider value={{ customers, isLoading, deleteCustomer, createCustomer }}>
+    <CustomerContext.Provider value={{ customers, isLoading, deleteCustomer, createCustomer, updateCustomer }}>
       {children}
     </CustomerContext.Provider>
   );
@@ -52,7 +65,7 @@ function CustomerProvider({ children }) {
 
 function useCustomers() {
   const context = useContext(CustomerContext);
-  if (context === undefined) throw new Error('Products context was used outside the ProductsProvider');
+  if (context === undefined) throw new Error('Customers context was used outside the CustomersProvider');
   return context;
 }
 
