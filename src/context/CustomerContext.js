@@ -28,32 +28,36 @@ function CustomerProvider({ children }) {
 
   async function createCustomer(customer) {
     setIsLoading(true);
+
     const { data, error } = await supabase.from('customers').insert(customer).select();
     if (data) setCustomers((customers) => [...customers, data[0]]);
     if (error) console.log(error);
+
     setIsLoading(false);
   }
 
   async function updateCustomer(selected, customer) {
     setIsLoading(true);
-    const { data, error } = await supabase.from('customers').update(customer).eq('name', selected).select();
 
-    // if (data) setCustomers((customers) => [...customers, data[0]]);
+    const { data, error } = await supabase.from('customers').update(customer).eq('name', selected).select();
     if (data) {
-      const updatedCustomers = customers.map((cust) => {
-        if (cust.id === customer.id) return { ...cust, customer };
-        return cust;
-      });
+      console.log(data);
+      const updatedCustomers = [...customers];
+      const idx = updatedCustomers.findIndex((cust) => cust.name === selected);
+      updatedCustomers[idx] = data[0];
       setCustomers(updatedCustomers);
     }
 
     if (error) console.log(error);
+
     setIsLoading(false);
   }
 
   async function deleteCustomer(name) {
+    setIsLoading(true);
     const { error } = await supabase.from('customers').delete().eq('name', name);
     if (!error) setCustomers((customers) => customers.filter((customer) => customer.name !== name));
+    setIsLoading(false);
   }
 
   return (

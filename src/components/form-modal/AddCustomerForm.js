@@ -16,7 +16,6 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  // width: 'fit-content',
   bgcolor: 'background.paper',
   boxShadow: 24,
   p: 4,
@@ -31,11 +30,6 @@ const CloseButton = styled(Button)({
 });
 
 export default function FormModal({ selected = '', modalOpen, setModalOpen }) {
-  // const [name, setName] = useState('');
-  // const [phone, setPhone] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [address, setAddress] = useState('');
-
   const [currentCustomer, setCurrentCustomer] = useState({ name: '', phone: '', email: '', address: '' });
   const { name, phone, email, address } = currentCustomer;
   const { createCustomer, updateCustomer, isLoading } = useCustomers();
@@ -57,23 +51,17 @@ export default function FormModal({ selected = '', modalOpen, setModalOpen }) {
       return;
     }
 
-    // const filename = coverImage.name.slice(0, -4) + uuid();
-
     const customer = {
       name: name.trim(),
       phone,
       email: email.trim(),
       address: address.trim(),
     };
+    console.log(customer);
 
     if (selected === '') createCustomer(customer);
     else updateCustomer(selected, customer);
-    // selected ? updateCustomer(selected, customer) : createCustomer(customer);
     if (!isLoading) setModalOpen(false);
-    // setName('');
-    // setPhone('');
-    // setEmail('');
-    // setAddress('');
   }
 
   return (
@@ -88,6 +76,7 @@ export default function FormModal({ selected = '', modalOpen, setModalOpen }) {
           Add New Customer
         </Typography>
         <CloseButton onClick={() => setModalOpen(false)}>&#10006;</CloseButton>
+        {/* TODO: Form validation and error highlighting */}
         <FormControl sx={{ width: '500px' }}>
           <TextField
             required
