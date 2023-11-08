@@ -1,23 +1,28 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { PropTypes } from 'prop-types';
 import { supabase } from '../supabase';
 
 const OrdersContext = createContext();
 
-const OrdersProvider = (children) => {
+OrdersProvider.propTypes = {
+  children: PropTypes.any,
+};
+
+function OrdersProvider({ children }) {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    async function getOrders() {
+      setIsLoading(true);
+      const { data, error } = await supabase.from('orders').select(`*, customers(name, phone)`);
+      if (data) setOrders(data);
+      if (error) throw new Error('Could not fetch orders data!');
+      setIsLoading(false);
+    }
+
     getOrders();
   }, []);
-
-  async function getOrders() {
-    setIsLoading(true);
-    const { data, error } = await supabase.from('orders').select('*');
-    if (data) setOrders(data);
-    if (error) throw new Error('Could not fetch orders data!');
-    setIsLoading(false);
-  }
 
   async function createOrders(order) {
     setIsLoading(true);
@@ -36,10 +41,22 @@ const OrdersProvider = (children) => {
     setIsLoading(false);
   }
 
+  async function getCustomer(customerId) {
+    const { data: customer, error } = await supabase
+      .from('customers')
+      .select('*')
+      // Filters
+      .eq('id', customerId);
+    if (error) throw new Error('Could not get customer data', error);
+    return customer[0];
+  }
+
   return (
-    <OrdersContext.Provider value={{ orders, isLoading, deleteOrder, createOrders }}>{children}</OrdersContext.Provider>
+    <OrdersContext.Provider value={{ orders, isLoading, deleteOrder, createOrders, getCustomer }}>
+      {children}
+    </OrdersContext.Provider>
   );
-};
+}
 
 const useOrders = () => {
   const context = useContext(OrdersContext);

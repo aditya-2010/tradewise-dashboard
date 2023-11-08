@@ -9,12 +9,14 @@ import CustomersPage from './pages/CustomersPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
+import OrdersPage from './pages/OrdersPage';
 // components
-import { ProductsProvider } from './context/ProductsContext';
 import Login from './pages/SupabaseLogin';
 import { supabase } from './supabase';
+// contexts
+import { ProductsProvider } from './context/ProductsContext';
 import { CustomerProvider } from './context/CustomerContext';
-import OrdersPage from './pages/OrdersPage';
+import { OrdersProvider } from './context/OrdersContext';
 
 // ----------------------------------------------------------------------
 
@@ -59,9 +61,9 @@ export default function Router() {
         {
           path: 'orders',
           element: (
-            // <ProductsProvider>
-            <OrdersPage />
-            // </ProductsProvider>
+            <OrdersProvider>
+              <OrdersPage />
+            </OrdersProvider>
           ),
         },
         { path: 'blog', element: <BlogPage /> },

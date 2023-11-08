@@ -6,8 +6,7 @@ import { Toolbar, Tooltip, IconButton, Typography, OutlinedInput, InputAdornment
 // component
 import { Icon } from '@iconify/react';
 import Iconify from '../../../components/iconify';
-import { useCustomers } from '../../../context/CustomerContext';
-import FormModal from '../../../components/form-modal/AddCustomerForm';
+import AddCustomerModal from '../../../components/form-modal/AddCustomerForm';
 
 // ----------------------------------------------------------------------
 
@@ -37,20 +36,21 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 UserListToolbar.propTypes = {
+  page: PropTypes.string,
   selected: PropTypes.array,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
   setSelected: PropTypes.func,
+  deleteFunction: PropTypes.func,
 };
 
-export default function UserListToolbar({ selected, setSelected, filterName, onFilterName }) {
+export default function UserListToolbar({ page, selected, setSelected, filterName, onFilterName, deleteFunction }) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const numSelected = selected.length;
-  const { deleteCustomer } = useCustomers();
 
   const handleDelete = () => {
-    selected.forEach((item) => deleteCustomer(item));
+    selected.forEach((item) => deleteFunction(item));
     setSelected([]);
   };
 
@@ -80,7 +80,11 @@ export default function UserListToolbar({ selected, setSelected, filterName, onF
         />
       )}
 
-      <FormModal modalOpen={modalOpen} setModalOpen={setModalOpen} selected={selected[0]} />
+      {page === 'customer' ? (
+        <AddCustomerModal modalOpen={modalOpen} setModalOpen={setModalOpen} selected={selected[0]} />
+      ) : (
+        <></>
+      )}
 
       {numSelected > 0 ? (
         <div>

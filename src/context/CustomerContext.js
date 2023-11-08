@@ -13,18 +13,18 @@ function CustomerProvider({ children }) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    async function getCustomers() {
+      setIsLoading(true);
+      const { data, error } = await supabase.from('customers').select('*');
+
+      if (data) setCustomers(data);
+      if (error) throw new Error('Could not fetch customers data!');
+
+      setIsLoading(false);
+    }
+
     getCustomers();
   }, []);
-
-  async function getCustomers() {
-    setIsLoading(true);
-    const { data, error } = await supabase.from('customers').select('*');
-
-    if (data) setCustomers(data);
-    if (error) throw new Error('Could not fetch customers data!');
-
-    setIsLoading(false);
-  }
 
   async function createCustomer(customer) {
     setIsLoading(true);

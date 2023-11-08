@@ -5,7 +5,7 @@ import { PropTypes } from 'prop-types';
 import { supabase } from '../../supabase';
 import { useCustomers } from '../../context/CustomerContext';
 
-FormModal.propTypes = {
+AddCustomerForm.propTypes = {
   modalOpen: PropTypes.bool,
   setModalOpen: PropTypes.func,
   selected: PropTypes.string,
@@ -29,7 +29,7 @@ const CloseButton = styled(Button)({
   right: '0',
 });
 
-export default function FormModal({ selected = '', modalOpen, setModalOpen }) {
+export default function AddCustomerForm({ selected = '', modalOpen, setModalOpen }) {
   const [currentCustomer, setCurrentCustomer] = useState({ name: '', phone: '', email: '', address: '' });
   const { name, phone, email, address } = currentCustomer;
   const { createCustomer, updateCustomer, isLoading } = useCustomers();
@@ -57,7 +57,6 @@ export default function FormModal({ selected = '', modalOpen, setModalOpen }) {
       email: email.trim(),
       address: address.trim(),
     };
-    console.log(customer);
 
     if (selected === '') createCustomer(customer);
     else updateCustomer(selected, customer);

@@ -19,6 +19,7 @@ import {
   TablePagination,
 } from '@mui/material';
 // components
+import Spinner from '../components/spinner/Spinner';
 import FormModal from '../components/form-modal/AddCustomerForm';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
@@ -26,7 +27,6 @@ import Scrollbar from '../components/scrollbar';
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
 // context
 import { useCustomers } from '../context/CustomerContext';
-import Spinner from '../components/spinner/Spinner';
 
 // ----------------------------------------------------------------------
 
@@ -134,6 +134,8 @@ export default function CustomerPage() {
 
   const isNotFound = !filteredCustomers.length && !!filterName;
 
+  const { deleteCustomer } = useCustomers();
+
   return (
     <>
       <Helmet>
@@ -154,10 +156,12 @@ export default function CustomerPage() {
 
         <Card>
           <UserListToolbar
+            page="customer"
             selected={selected}
             setSelected={setSelected}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            deleteFunction={deleteCustomer}
           />
 
           <Scrollbar>
@@ -190,7 +194,7 @@ export default function CustomerPage() {
 
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar>{name.slice(0, 1)}</Avatar>
+                              <Avatar>{name.slice(0, 1).toUpperCase()}</Avatar>
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
