@@ -1,28 +1,11 @@
 import { useState } from 'react';
 // @mui
 import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
+import { Box, Divider, Typography, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // supabase
 import { supabase } from '../../../supabase';
 // mocks_
 import account from '../../../_mock/account';
-
-// ----------------------------------------------------------------------
-
-const MENU_OPTIONS = [
-  {
-    label: 'Home',
-    icon: 'eva:home-fill',
-  },
-  {
-    label: 'Profile',
-    icon: 'eva:person-fill',
-  },
-  {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
-  },
-];
 
 // ----------------------------------------------------------------------
 
@@ -91,16 +74,6 @@ export default function AccountPopover() {
             {account.email}
           </Typography>
         </Box>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <Stack sx={{ p: 1 }}>
-          {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

@@ -24,7 +24,7 @@ function OrdersProvider({ children }) {
     getOrders();
   }, []);
 
-  async function createOrders(order) {
+  async function createOrder(order) {
     setIsLoading(true);
 
     const { data, error } = await supabase.from('orders').insert(order).select();
@@ -41,20 +41,8 @@ function OrdersProvider({ children }) {
     setIsLoading(false);
   }
 
-  async function getCustomer(customerId) {
-    const { data: customer, error } = await supabase
-      .from('customers')
-      .select('*')
-      // Filters
-      .eq('id', customerId);
-    if (error) throw new Error('Could not get customer data', error);
-    return customer[0];
-  }
-
   return (
-    <OrdersContext.Provider value={{ orders, isLoading, deleteOrder, createOrders, getCustomer }}>
-      {children}
-    </OrdersContext.Provider>
+    <OrdersContext.Provider value={{ orders, isLoading, deleteOrder, createOrder }}>{children}</OrdersContext.Provider>
   );
 }
 
