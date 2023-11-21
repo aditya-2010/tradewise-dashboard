@@ -34,10 +34,11 @@ function OrdersProvider({ children }) {
     setIsLoading(false);
   }
 
-  async function deleteOrder(id) {
+  async function deleteOrder(name) {
+    console.log(name);
     setIsLoading(true);
-    const { error } = await supabase.from('orders').delete().eq('id', id);
-    if (!error) setOrders((ords) => ords.filter((ord) => ord.id !== id));
+    const { error } = await supabase.from('orders').delete().eq('customers(name)', name);
+    if (!error) setOrders((ords) => ords.filter((ord) => ord.customers.name !== name));
     setIsLoading(false);
   }
 

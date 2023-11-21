@@ -14,6 +14,7 @@ export default function Login() {
       }}
     >
       <div style={{ width: '400px' }}>
+        <p>adityanakadi3@gmail.com - vq@V9ge4ux2gF7V</p>
         <Auth
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
